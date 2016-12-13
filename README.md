@@ -6,7 +6,23 @@ A clone version of [ScrollablePanel](https://github.com/Kelin-Hong/ScrollablePan
 A flexible view for providing a limited rect window into a large data set, just like a two-dimensional RecyclerView.
 
 It different from RecyclerView is that it's two-dimensional(just like a Panel) and it pin the itemView of first row and first column in their original location.
+## Download ##
 
+Step 1. Add it in your root build.gradle at the end of repositories:
+```
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+Step 2. Add the dependency in your build.gradle
+```
+dependencies {
+	        compile 'com.github.PoePoeMyintSwe:ScrollablePanel:v1.0.0'
+	}
+```
 
 ## Usage ##
 ScrollablePanel is very similar to the RecyclerView and we can use them in the same way.
