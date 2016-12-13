@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void generateTestData(ScrollablePanelAdapter scrollablePanelAdapter) {
+    scrollablePanelAdapter.setTitle("Room/Date");
+
     List<RoomInfo> roomInfoList = new ArrayList<>();
     for (int i = 0; i < 6; i++) {
       RoomInfo roomInfo = new RoomInfo();

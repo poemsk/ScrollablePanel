@@ -95,9 +95,13 @@ public class ScrollablePanelView extends RelativeLayout {
   }
 
   public void setAdapter(PanelAdapter stackAdapter) {
+    //clear cornerview
+    cornerView.removeAllViews();
+
     //   init corner view
     RecyclerView.ViewHolder viewHolder =
         stackAdapter.onCreateViewHolder(this, stackAdapter.getItemViewType(0, 0));
+    stackAdapter.onBindViewHolder(viewHolder, 0, 0);
     cornerView.addView(viewHolder.itemView);
 
     //  init column headers

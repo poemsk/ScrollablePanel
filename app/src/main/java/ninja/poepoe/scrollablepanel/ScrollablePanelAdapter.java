@@ -19,6 +19,7 @@ public class ScrollablePanelAdapter extends PanelAdapter {
   private static final int DATE_TYPE = 1;
   private static final int ORDER_TYPE = 2;
 
+  private String title;
   private List<RoomInfo> roomInfoList;
   private List<DateInfo> dateInfoList;
   private List<List<OrderInfo>> ordersList;
@@ -44,6 +45,7 @@ public class ScrollablePanelAdapter extends PanelAdapter {
         setOrderView(row, column, (OrderViewHolder) holder);
         break;
       case TITLE_TYPE:
+        setTitleView(title, (TitleViewHolder) holder);
         break;
       default:
         setOrderView(row, column, (OrderViewHolder) holder);
@@ -84,6 +86,13 @@ public class ScrollablePanelAdapter extends PanelAdapter {
         .inflate(R.layout.listitem_order_info, parent, false));
   }
 
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  private void setTitleView(String title, TitleViewHolder viewHolder) {
+    viewHolder.titleTextView.setText(title);
+  }
   private void setDateView(int pos, DateViewHolder viewHolder) {
     DateInfo dateInfo = dateInfoList.get(pos - 1);
     if (dateInfo != null && pos > 0) {
