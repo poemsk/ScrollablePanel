@@ -14,14 +14,12 @@ public class GridContentAdapter extends RecyclerView.Adapter<GridContentAdapter.
 
   private PanelAdapter stackAdapter;
   private HashSet<RecyclerView> observerList = new HashSet<>();
+  private RecyclerView headerRecyclerView;
 
   public GridContentAdapter(PanelAdapter stackAdapter, RecyclerView headerRecyclerView) {
     this.stackAdapter = stackAdapter;
+    this.headerRecyclerView = headerRecyclerView;
     initRecyclerView(headerRecyclerView);
-  }
-
-  public void setPanelAdapter(PanelAdapter panelAdapter) {
-    this.stackAdapter = panelAdapter;
   }
 
   @Override public long getItemId(int position) {
@@ -41,8 +39,20 @@ public class GridContentAdapter extends RecyclerView.Adapter<GridContentAdapter.
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
     if (holder.rowItemAdapter.getItemCount() == 0) {
       holder.rowItemAdapter.setData(stackAdapter, position + 1);
-    } else {
-      holder.rowItemAdapter.setRow(position + 1);
+
+      LinearLayoutManager headerLayoutManager =
+          (LinearLayoutManager) headerRecyclerView.getLayoutManager();
+
+      int firstVisiblePosition = headerLayoutManager.findFirstVisibleItemPosition();
+      View v = headerLayoutManager.getChildAt(0);
+
+      if (firstVisiblePosition > 0 && v != null) {
+        int offset = v.getLeft();
+        if (firstVisiblePosition + 1 != holder.rowItemAdapter.getItemCount()
+            && holder.rowItemAdapter.getItemCount() > 0) {
+          holder.manager.scrollToPositionWithOffset(firstVisiblePosition + 1, offset);
+        }
+      }
     }
   }
 
@@ -54,12 +64,14 @@ public class GridContentAdapter extends RecyclerView.Adapter<GridContentAdapter.
   static class ViewHolder extends RecyclerView.ViewHolder {
     RecyclerView recyclerView;
     RowItemAdapter rowItemAdapter = new RowItemAdapter();
+    LinearLayoutManager manager;
 
     public ViewHolder(View view) {
       super(view);
+      this.manager =
+          new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
       this.recyclerView = (RecyclerView) view;
-      this.recyclerView.setLayoutManager(
-          new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
+      this.recyclerView.setLayoutManager(manager);
       this.recyclerView.setAdapter(rowItemAdapter);
     }
   }
