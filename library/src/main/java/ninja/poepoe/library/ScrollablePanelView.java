@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -18,7 +17,6 @@ public class ScrollablePanelView extends RelativeLayout {
   private RecyclerView rvRowHeaders, rvColumnHeaders, rvContent;
   private FrameLayout cornerView;
   private Context mContext;
-  private ArrayList<Integer> headerCellWidth = new ArrayList<>();
 
   public ScrollablePanelView(Context context) {
     super(context);
@@ -113,8 +111,7 @@ public class ScrollablePanelView extends RelativeLayout {
     rvRowHeaders.setAdapter(rowHeaderAdapter);
 
     //  init grid
-    GridContentAdapter gridContentAdapter =
-        new GridContentAdapter(stackAdapter, rvColumnHeaders, headerCellWidth);
+    GridContentAdapter gridContentAdapter = new GridContentAdapter(stackAdapter, rvColumnHeaders);
     rvContent.setAdapter(gridContentAdapter);
   }
 }

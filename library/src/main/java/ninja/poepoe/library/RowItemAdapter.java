@@ -8,42 +8,43 @@ import android.view.ViewGroup;
  */
 
 public class RowItemAdapter extends RecyclerView.Adapter {
-  private PanelAdapter stackAdapter;
+  private PanelAdapter panelAdapter;
   private int row;
-  private int width = 0;
 
-  public RowItemAdapter(PanelAdapter stackAdapter, int row, int width) {
-    this.stackAdapter = stackAdapter;
-    this.row = row;
-    this.width = width;
+  public RowItemAdapter() {
   }
 
   public RowItemAdapter(PanelAdapter stackAdapter, int row) {
-    this.stackAdapter = stackAdapter;
+    this.panelAdapter = stackAdapter;
     this.row = row;
+  }
+
+  public void setData(PanelAdapter stackAdapter, int row) {
+    this.panelAdapter = stackAdapter;
+    this.row = row;
+    notifyDataSetChanged();
   }
 
   public void setRow(int row) {
     this.row = row;
+    notifyDataSetChanged();
   }
 
   @Override public int getItemViewType(int position) {
-    return stackAdapter.getItemViewType(row, position + 1);
+    if (panelAdapter == null) return -1;
+    return panelAdapter.getItemViewType(row, position + 1);
   }
 
   @Override public int getItemCount() {
-    return stackAdapter.getColumnCount() - 1;
+    if (panelAdapter == null) return 0;
+    return panelAdapter.getColumnCount() - 1;
   }
 
   @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    return stackAdapter.onCreateViewHolder(parent, viewType);
+    return panelAdapter.onCreateViewHolder(parent, viewType);
   }
 
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-    stackAdapter.onBindViewHolder(holder, row, position + 1);
-    if (width != 0) {
-      holder.itemView.setLayoutParams(
-          new RecyclerView.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT));
-    }
+    panelAdapter.onBindViewHolder(holder, row, position + 1);
   }
 }
