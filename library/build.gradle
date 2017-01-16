@@ -4,7 +4,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.PoePoeMyintSwe'
 def versionMajor = 1
 def versionMinor = 0
-def versionPatch = 3
+def versionPatch = 4
 
 android {
   compileSdkVersion 25
