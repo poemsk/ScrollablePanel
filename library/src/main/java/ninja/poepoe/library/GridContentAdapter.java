@@ -17,9 +17,13 @@ public class GridContentAdapter extends RecyclerView.Adapter<GridContentAdapter.
   private RecyclerView headerRecyclerView;
   private HashSet<Integer> rows = new HashSet<>();
 
+  private SynchronizedScrollListener scrollListener;
+
   public GridContentAdapter(PanelAdapter stackAdapter, RecyclerView headerRecyclerView) {
     this.stackAdapter = stackAdapter;
     this.headerRecyclerView = headerRecyclerView;
+
+    scrollListener = new SynchronizedScrollListener(observerList);
     initRecyclerView(headerRecyclerView);
   }
 
@@ -66,7 +70,7 @@ public class GridContentAdapter extends RecyclerView.Adapter<GridContentAdapter.
 
   private void initRecyclerView(RecyclerView recyclerView) {
     observerList.add(recyclerView);
-    recyclerView.addOnScrollListener(new ScrollListener(observerList, false));
+    recyclerView.addOnScrollListener(scrollListener);
   }
 
   class ViewHolder extends RecyclerView.ViewHolder {
