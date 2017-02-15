@@ -61,8 +61,8 @@ public class ScrollablePanelView extends RelativeLayout {
     HashSet<RecyclerView> observerList = new HashSet<>();
     observerList.add(rvContent);
     observerList.add(rvRowHeaders);
-    rvRowHeaders.addOnScrollListener(new ScrollListener(observerList));
-    rvContent.addOnScrollListener(new ScrollListener(observerList));
+    rvRowHeaders.addOnScrollListener(new ScrollListener(observerList, true));
+    rvContent.addOnScrollListener(new ScrollListener(observerList, true));
   }
 
   private void generateViewIds() {

@@ -66,7 +66,7 @@ public class GridContentAdapter extends RecyclerView.Adapter<GridContentAdapter.
 
   private void initRecyclerView(RecyclerView recyclerView) {
     observerList.add(recyclerView);
-    recyclerView.addOnScrollListener(new ScrollListener(observerList));
+    recyclerView.addOnScrollListener(new ScrollListener(observerList, false));
   }
 
   class ViewHolder extends RecyclerView.ViewHolder {
