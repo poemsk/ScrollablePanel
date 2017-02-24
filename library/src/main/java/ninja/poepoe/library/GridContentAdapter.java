@@ -15,6 +15,7 @@ public class GridContentAdapter extends RecyclerView.Adapter<GridContentAdapter.
   private PanelAdapter stackAdapter;
   private HashSet<RecyclerView> observerList = new HashSet<>();
   private RecyclerView headerRecyclerView;
+  private HashSet<Integer> rows = new HashSet<>();
 
   public GridContentAdapter(PanelAdapter stackAdapter, RecyclerView headerRecyclerView) {
     this.stackAdapter = stackAdapter;
@@ -36,40 +37,46 @@ public class GridContentAdapter extends RecyclerView.Adapter<GridContentAdapter.
     return viewHolder;
   }
 
-  @Override public void onBindViewHolder(ViewHolder holder, int position) {
-    if (holder.rowItemAdapter.getItemCount() == 0) {
-      holder.rowItemAdapter.setData(stackAdapter, position + 1);
+  @Override public void onViewRecycled(ViewHolder holder) {
+    super.onViewRecycled(holder);
+    int position = holder.getAdapterPosition();
+    if (rows.contains(position)) {
+      rows.remove(position);
+    }
+  }
 
+  @Override public void onBindViewHolder(ViewHolder holder, int position) {
+    holder.recyclerView.setAdapter(holder.rowItemAdapter);
+    holder.rowItemAdapter.setData(stackAdapter, position + 1);
+
+    if (!rows.contains(position)) {
+      rows.add(position);
+      //scroll to position
       LinearLayoutManager headerLayoutManager =
           (LinearLayoutManager) headerRecyclerView.getLayoutManager();
-
       int firstVisiblePosition = headerLayoutManager.findFirstVisibleItemPosition();
       View v = headerLayoutManager.getChildAt(0);
 
       if (firstVisiblePosition > 0 && v != null) {
-        int offset = v.getLeft();
-        if (firstVisiblePosition + 1 != holder.rowItemAdapter.getItemCount()
-            && holder.rowItemAdapter.getItemCount() > 0) {
-          holder.manager.scrollToPositionWithOffset(firstVisiblePosition + 1, offset);
-        }
+        int offsetLeft = v.getLeft();
+        holder.manager.scrollToPositionWithOffset(firstVisiblePosition, offsetLeft);
       }
     }
   }
 
-  public void initRecyclerView(RecyclerView recyclerView) {
+  private void initRecyclerView(RecyclerView recyclerView) {
     observerList.add(recyclerView);
-    recyclerView.addOnScrollListener(new ScrollListener(observerList));
+    recyclerView.addOnScrollListener(new ScrollListener(observerList, false));
   }
 
-  static class ViewHolder extends RecyclerView.ViewHolder {
+  class ViewHolder extends RecyclerView.ViewHolder {
     RecyclerView recyclerView;
     RowItemAdapter rowItemAdapter = new RowItemAdapter();
     LinearLayoutManager manager;
 
     public ViewHolder(View view) {
       super(view);
-      this.manager =
-          new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
+      manager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
       this.recyclerView = (RecyclerView) view;
       this.recyclerView.setLayoutManager(manager);
       this.recyclerView.setAdapter(rowItemAdapter);
