@@ -46,7 +46,6 @@ public class GridContentAdapter extends RecyclerView.Adapter<GridContentAdapter.
   }
 
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
-    holder.recyclerView.setAdapter(holder.rowItemAdapter);
     holder.rowItemAdapter.setData(stackAdapter, position + 1);
 
     if (!rows.contains(position)) {

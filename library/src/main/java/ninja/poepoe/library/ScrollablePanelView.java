@@ -17,6 +17,9 @@ public class ScrollablePanelView extends RelativeLayout {
   private RecyclerView rvRowHeaders, rvColumnHeaders, rvContent;
   private FrameLayout cornerView;
   private Context mContext;
+  private RowItemAdapter columnHeaderAdapter;
+  private RowHeaderAdapter rowHeaderAdapter;
+  private GridContentAdapter gridContentAdapter;
 
   public ScrollablePanelView(Context context) {
     super(context);
@@ -103,15 +106,30 @@ public class ScrollablePanelView extends RelativeLayout {
     cornerView.addView(viewHolder.itemView);
 
     //  init column headers
-    RowItemAdapter columnHeaderAdapter = new RowItemAdapter(stackAdapter, 0);
+    columnHeaderAdapter = new RowItemAdapter(stackAdapter, 0);
     rvColumnHeaders.setAdapter(columnHeaderAdapter);
 
     //init row headers
-    RowHeaderAdapter rowHeaderAdapter = new RowHeaderAdapter(stackAdapter, 0);
+    rowHeaderAdapter = new RowHeaderAdapter(stackAdapter, 0);
     rvRowHeaders.setAdapter(rowHeaderAdapter);
 
     //  init grid
-    GridContentAdapter gridContentAdapter = new GridContentAdapter(stackAdapter, rvColumnHeaders);
+    gridContentAdapter = new GridContentAdapter(stackAdapter, rvColumnHeaders);
     rvContent.setAdapter(gridContentAdapter);
+  }
+
+  public void notifyChange(PanelAdapter stackAdapter) {
+    //clear cornerview
+    cornerView.removeAllViews();
+
+    RecyclerView.ViewHolder viewHolder =
+        stackAdapter.onCreateViewHolder(this, stackAdapter.getItemViewType(0, 0));
+    stackAdapter.onBindViewHolder(viewHolder, 0, 0);
+    cornerView.addView(viewHolder.itemView);
+
+    //  notify column, row and cells
+    columnHeaderAdapter.notifyDataSetChanged();
+    rowHeaderAdapter.notifyDataSetChanged();
+    gridContentAdapter.notifyDataSetChanged();
   }
 }
