@@ -23,7 +23,7 @@ allprojects {
 Step 2. Add the dependency in your build.gradle
 ```
 dependencies {
-	        compile ('com.github.PoePoeMyintSwe:ScrollablePanel:v1.0.6'){
+	        compile ('com.github.PoePoeMyintSwe:ScrollablePanel:v1.0.7'){
 	          exclude group: 'com.android.support'
 	        }
 	}
