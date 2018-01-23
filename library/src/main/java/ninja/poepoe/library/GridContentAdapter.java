@@ -50,15 +50,25 @@ public class GridContentAdapter extends RecyclerView.Adapter<GridContentAdapter.
 
     if (!rows.contains(position)) {
       rows.add(position);
-      //scroll to position
-      LinearLayoutManager headerLayoutManager =
-          (LinearLayoutManager) headerRecyclerView.getLayoutManager();
-      int firstVisiblePosition = headerLayoutManager.findFirstVisibleItemPosition();
-      View v = headerLayoutManager.getChildAt(0);
 
-      if (firstVisiblePosition > 0 && v != null) {
-        int offsetLeft = v.getLeft();
-        holder.manager.scrollToPositionWithOffset(firstVisiblePosition, offsetLeft);
+      LinearLayoutManager currentLayoutManager =
+          (LinearLayoutManager) headerRecyclerView.getLayoutManager();
+      int firstVisiblePosition = currentLayoutManager.findFirstVisibleItemPosition();
+      View v = currentLayoutManager.getChildAt(0);
+
+      if (v != null) {
+        int offset;
+        offset = currentLayoutManager.getDecoratedRight(v);
+
+        for (RecyclerView rv : observerList) {
+          if (headerRecyclerView != rv) {
+            //scroll to position
+            LinearLayoutManager otherLayoutManager = (LinearLayoutManager) rv.getLayoutManager();
+            if (otherLayoutManager != null) {
+              otherLayoutManager.scrollToPositionWithOffset(firstVisiblePosition + 1, offset);
+            }
+          }
+        }
       }
     }
   }
